@@ -1277,7 +1277,7 @@ static void compile_regex(GeanyFiletype *ft, gchar *regstr)
 
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, GeanyLineType *linetype)
 {
 	gchar *regstr;
 	gchar **tmp;
@@ -1299,6 +1299,7 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 	*filename = NULL;
 	*line = -1;
+	*linetype = LINE_ERROR;
 
 	if (G_UNLIKELY(EMPTY(regstr)))
 		return FALSE;
