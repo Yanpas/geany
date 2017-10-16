@@ -48,7 +48,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <time.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -820,14 +819,14 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line, Geany
 	if (data->type_idx != -1)
 	{
 		gchar* typestr = fields[data->type_idx];
-		while(*typestr != '\0' && isspace(*typestr))
-			typestr++;
+		for(size_t i=0; typestr[i] != '\0'; ++i)
+			typestr[i] = g_ascii_tolower(typestr[i]);
 		*linetype = LINE_TEXT;
-		if(g_str_has_prefix(typestr, "error"))
+		if(g_strstr_len(typestr, G_MAXSIZE, "err"))
 			*linetype = LINE_ERROR;
-		else if(g_str_has_prefix(typestr, "warning"))
+		else if(g_strstr_len(typestr, G_MAXSIZE, "warn"))
 			*linetype = LINE_WARNING;
-		else if(g_str_has_prefix(typestr, "note"))
+		else if(g_strstr_len(typestr, G_MAXSIZE, "note"))
 			*linetype = LINE_NOTE;
 	}
 	/* let's stop here if there is no filename in the error message */
