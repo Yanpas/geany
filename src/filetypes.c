@@ -1324,7 +1324,6 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	gchar* linepat = g_match_info_fetch_named(minfo, "line");
 	if(linepat)
 	{
-		puts("trying new style");
 		gboolean res = FALSE;
 
 		*line = g_ascii_strtoll(linepat, NULL, 10);
@@ -1333,15 +1332,22 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 			*line = -1;
 			goto match_free;
 		}
-
-		if(g_match_info_fetch_named_pos(minfo, "error", NULL, NULL))
-			*linetype = LINE_ERROR;
-		else if(g_match_info_fetch_named_pos(minfo, "warning", NULL, NULL))
-			*linetype = LINE_WARNING;
-		else if(g_match_info_fetch_named_pos(minfo, "note", NULL, NULL))
-			*linetype = LINE_NOTE;
-
 		*filename = g_match_info_fetch_named(minfo, "file");
+		res = *filename != NULL;
+
+		gint pos_beg;
+		if(g_match_info_fetch_named_pos(minfo, "error", &pos_beg, NULL) && pos_beg != -1)
+		{
+			*linetype = LINE_ERROR;
+		}
+		else if(g_match_info_fetch_named_pos(minfo, "warning", &pos_beg, NULL) && pos_beg != -1)
+		{
+			*linetype = LINE_WARNING;
+		}
+		else if(g_match_info_fetch_named_pos(minfo, "note", &pos_beg, NULL) && pos_beg != -1)
+		{
+			*linetype = LINE_NOTE;
+		}
 
 match_free:
 		g_match_info_free(minfo);

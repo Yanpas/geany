@@ -166,7 +166,6 @@ typedef struct GeanyFiletype
 	gboolean		  comment_use_indent;
 	GeanyFiletypeGroupID group;
 	gchar			 *error_regex_string;
-	gchar			 *warning_regex_string;
 	struct GeanyFiletype	 *lexer_filetype;
 	gchar			 *mime_type;
 	GIcon			 *icon;
